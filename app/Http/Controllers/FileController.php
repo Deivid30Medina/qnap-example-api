@@ -15,11 +15,34 @@ class FileController extends Controller
     }
 
     /**
-     * Subir un archivo a la carpeta especificada https://download.qnap.com/dev/API_QNAP_QTS_Authentication.pdf
      * @OA\Post (
-     *     path="/api/archivos/upload",
-     *     tags={"Archivo"},
+     *     path="/api/v1/dnda/files/upload",
+     *     tags={"File"},
      *     summary="Subir un archivo a QNAP",
+     *      description=" 
+     *  Ejemplo de request:
+     *      POST api/v1/dnda/files/upload?sid={value}&folderPath={value}
+     *          
+     *      form-data
+     *          KEY: file
+     *          VALUE: fileName.xxxx         
+     * 
+     *  Ejemplo de respuesta correcta:
+     *      {
+     *          'status': 1,
+     *          'size': '6274227',
+     *          'name': 'example.pdf'
+     *      }
+     * 
+     *  Ejemplo de respuesta incorrecta
+     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
+     *      {
+     *          'version': '5.5.5',
+     *          'build': '20240817',
+     *          'status': 9,
+     *          'success': 'true'
+     *      }
+     *      ",
      *     @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
@@ -53,22 +76,19 @@ class FileController extends Controller
      *         response=200,
      *         description="Archivo subido correctamente",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Archivo subido exitosamente."),
-     *             @OA\Property(property="result", type="object", 
-     *                 @OA\Property(property="status", type="string", example="success"),
-     *                 @OA\Property(property="uploadedFile", type="string", example="mi_archivo.txt"),
-     *                 @OA\Property(property="folderPath", type="string", example="/mi/carpeta")
-     *             )
+     *             @OA\Property(property="status", type="string", example="1."),
+     *             @OA\Property(property="size", type="string", example="4514151."),
+     *             @OA\Property(property="name", type="string", example="fileName.xxxx"),
      *         )
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Contenido no procesable",
+     *         description="Contenido no procesable documentacion: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="El campo folderPath es obligatorio."),
-     *             @OA\Property(property="errors", type="object", 
-     *                 @OA\Property(property="folderPath", type="array", @OA\Items(type="string"), example={"El campo folderPath es obligatorio."})
-     *             )
+     *             @OA\Property(property="version", type="string", example="5.5.5"),
+     *             @OA\Property(property="build", type="string", example="20240817"),
+     *             @OA\Property(property="status", type="number", example="9"),
+     *             @OA\Property(property="success", type="string", example="true"),
      *         )
      *     )
      * )
@@ -90,8 +110,19 @@ class FileController extends Controller
     /**
      * Descargar un archivo desde la carpeta especificada
      * @OA\Get (
-     *     path="/api/archivos/download",
-     *     tags={"Archivo"},
+     *     path="/api/v1/dnda/files/download",
+     *     tags={"File"},
+     *     description=" 
+     *  Ejemplo de request:
+     *      POST api/v1/dnda/files/download?sid={value}&folderPath={value}&fileName={value}
+     *               
+     *  Ejemplo de respuesta correcta:
+     *      Archivo descargado
+     * 
+     *  Ejemplo de respuesta incorrecta
+     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
+     *      404 not found
+     *      ",
      *     @OA\Parameter(
      *         name="sid",
      *         in="query",
@@ -100,45 +131,47 @@ class FileController extends Controller
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
-     *         name="filePath",
+     *         name="folderPath",
      *         in="query",
      *         required=true,
-     *         description="Ruta del archivo que se desea descargar",
+     *         description="Ruta donde se encuentra el archivo que se desea descargar",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="fileName",
+     *         in="query",
+     *         required=true,
+     *         description="Nombre del archivo con extención que se desea",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Archivo descargado correctamente",
-     *         @OA\MediaType(
-     *             mediaType="application/octet-stream",
-     *             @OA\Schema(
-     *                 type="string",
-     *                 format="binary"
-     *             )
-     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Archivo no encontrado",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="El archivo solicitado no se encontró."),
-     *             @OA\Property(property="filePath", type="string", example="/mi/carpeta/mi_archivo.txt")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Contenido no procesable",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="El campo filePath es obligatorio."),
-     *             @OA\Property(property="errors", type="object", 
-     *                 @OA\Property(property="filePath", type="array", @OA\Items(type="string"), example={"El campo filePath es obligatorio."})
-     *             )
-     *         )
+     *         description="Contenido no encontrado: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
      *     )
      * )
      */
     public function download(Request $request)
     {
-        // Lógica para descargar el archivo
+
+        $request->validate([
+            'sid' => 'required|string',
+            'folderPath' => 'required|string',
+            'fileName' => 'required|string',
+        ]);
+
+        $result = $this->qnapService->dowloadFile($request->input('sid'), $request->input('folderPath'), $request->input('fileName'));
+
+        // Configurar las cabeceras para la respuesta HTTP
+        foreach ($result['headers'] as $header => $value) {
+            header("$header: $value");
+        }
+
+        // Enviar el contenido del archivo
+        echo $result['content'];
+        exit; // Terminar el script después de enviar el archivo
     }
 }

@@ -18,8 +18,11 @@ class QnapService
     {
         $this->httpClient = new Client([
             'verify' => false, // Ignorar la verificación del certificado SSL
+            'curl' => [
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2, // Permite que CURL negocie el protocolo TLS
+            ]
         ]);
-        $this->nasSettings = config('nas'); // Asumiendo que tus configuraciones están en config/nas.php
+        $this->nasSettings = config('nas'); 
     }
 
     public function uploadFile(string $folderPath, UploadedFile $file, string $sid)
