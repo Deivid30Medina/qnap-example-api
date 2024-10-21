@@ -1,0 +1,216 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Gestión de Archivos en QNAP",
+        "description": "Esta API permite la subida y descarga de archivos en un servidor QNAP, facilitando la gestión de datos. Se proporciona un ejemplo de cómo interactuar con el servidor QNAP utilizando PHP, lo que permite a los desarrolladores integrar fácilmente la gestión de archivos en sus aplicaciones.",
+        "contact": {
+            "name": "Deivid Medina",
+            "email": "-"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/archivos/upload": {
+            "post": {
+                "tags": [
+                    "Archivo"
+                ],
+                "summary": "Subir un archivo a QNAP",
+                "description": "Subir un archivo a la carpeta especificada https://download.qnap.com/dev/API_QNAP_QTS_Authentication.pdf",
+                "operationId": "ec6a9dd8eaf5f2a7ae4f60fe57114007",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "sid": {
+                                        "description": "ID de sesión del usuario",
+                                        "type": "string"
+                                    },
+                                    "folderPath": {
+                                        "description": "Ruta de la carpeta donde se subirá el archivo",
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "description": "Archivo a subir",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "sid": "12345",
+                                    "folderPath": "/mi/carpeta",
+                                    "file": "mi_archivo.txt"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Archivo subido correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Archivo subido exitosamente."
+                                        },
+                                        "result": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "success"
+                                                },
+                                                "uploadedFile": {
+                                                    "type": "string",
+                                                    "example": "mi_archivo.txt"
+                                                },
+                                                "folderPath": {
+                                                    "type": "string",
+                                                    "example": "/mi/carpeta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Contenido no procesable",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El campo folderPath es obligatorio."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "folderPath": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "El campo folderPath es obligatorio."
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/archivos/download": {
+            "get": {
+                "tags": [
+                    "Archivo"
+                ],
+                "summary": "Descargar un archivo desde la carpeta especificada",
+                "operationId": "502d7802827e01eb9075be7e0f4c841a",
+                "parameters": [
+                    {
+                        "name": "sid",
+                        "in": "query",
+                        "description": "ID de sesión del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filePath",
+                        "in": "query",
+                        "description": "Ruta del archivo que se desea descargar",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Archivo descargado correctamente",
+                        "content": {
+                            "application/octet-stream": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Archivo no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El archivo solicitado no se encontró."
+                                        },
+                                        "filePath": {
+                                            "type": "string",
+                                            "example": "/mi/carpeta/mi_archivo.txt"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Contenido no procesable",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El campo filePath es obligatorio."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "filePath": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "El campo filePath es obligatorio."
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Archivo",
+            "description": "Archivo"
+        }
+    ]
+}
