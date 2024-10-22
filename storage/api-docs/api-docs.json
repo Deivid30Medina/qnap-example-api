@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API de Gestión de Archivos en QNAP",
-        "description": "Esta API permite la subida y descarga de archivos en un servidor QNAP, facilitando la gestión de datos. Se proporciona un ejemplo de cómo interactuar con el servidor QNAP utilizando PHP, lo que permite a los desarrolladores integrar fácilmente la gestión de archivos en sus aplicaciones.",
+        "title": "QNAP File Management API",
+        "description": "This API enables file upload and download operations on a QNAP server, facilitating data management. It provides an example of how to interact with the QNAP server using PHP, allowing developers to easily integrate file management features into their applications.",
         "contact": {
             "name": "Deivid Medina",
             "email": "-"
@@ -15,8 +15,8 @@
                 "tags": [
                     "File"
                 ],
-                "summary": "Subir un archivo a QNAP",
-                "description": " \n     *  Ejemplo de request:\n     *      POST api/v1/dnda/files/upload?sid={value}&folderPath={value}\n     *          \n     *      form-data\n     *          KEY: file\n     *          VALUE: fileName.xxxx         \n     * \n     *  Ejemplo de respuesta correcta:\n     *      {\n     *          'status': 1,\n     *          'size': '6274227',\n     *          'name': 'example.pdf'\n     *      }\n     * \n     *  Ejemplo de respuesta incorrecta\n     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      {\n     *          'version': '5.5.5',\n     *          'build': '20240817',\n     *          'status': 9,\n     *          'success': 'true'\n     *      }\n     *      ",
+                "summary": "Upload a file to QNAP",
+                "description": "\n     *  Example request:\n     *      POST api/v1/dnda/files/upload?sid={value}&folderPath={value}\n     *          \n     *      form-data\n     *          KEY: file\n     *          VALUE: fileName.xxxx         \n     * \n     *  Example of a successful response:\n     *      {\n     *          'status': 1,\n     *          'size': '6274227',\n     *          'name': 'example.pdf'\n     *      }\n     * \n     *  Example of an unsuccessful response:\n     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      {\n     *          'version': '5.5.5',\n     *          'build': '20240817',\n     *          'status': 9,\n     *          'success': 'true'\n     *      }\n     *      ",
                 "operationId": "b21678ab2dbcdbcc7b940ea85d028573",
                 "requestBody": {
                     "content": {
@@ -24,15 +24,15 @@
                             "schema": {
                                 "properties": {
                                     "sid": {
-                                        "description": "ID de sesión del usuario",
+                                        "description": "User session ID",
                                         "type": "string"
                                     },
                                     "folderPath": {
-                                        "description": "Ruta de la carpeta donde se subirá el archivo",
+                                        "description": "Folder path where the file will be uploaded",
                                         "type": "string"
                                     },
                                     "file": {
-                                        "description": "Archivo a subir",
+                                        "description": "File to upload",
                                         "type": "string",
                                         "format": "binary"
                                     }
@@ -40,8 +40,8 @@
                                 "type": "object",
                                 "example": {
                                     "sid": "12345",
-                                    "folderPath": "/mi/carpeta",
-                                    "file": "mi_archivo.txt"
+                                    "folderPath": "/my/folder",
+                                    "file": "my_file.txt"
                                 }
                             }
                         }
@@ -49,7 +49,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Archivo subido correctamente",
+                        "description": "File uploaded successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -73,7 +73,7 @@
                         }
                     },
                     "422": {
-                        "description": "Contenido no procesable documentacion: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
+                        "description": "Unprocessable content, documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -108,14 +108,14 @@
                 "tags": [
                     "File"
                 ],
-                "summary": "Descargar un archivo desde la carpeta especificada",
-                "description": " \n     *  Ejemplo de request:\n     *      POST api/v1/dnda/files/download?sid={value}&folderPath={value}&fileName={value}\n     *               \n     *  Ejemplo de respuesta correcta:\n     *      Archivo descargado\n     * \n     *  Ejemplo de respuesta incorrecta\n     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      404 not found\n     *      ",
+                "summary": "Download a file from the specified folder",
+                "description": "\n     *  Example request:\n     *      POST api/v1/dnda/files/download?sid={value}&folderPath={value}&fileName={value}\n     *               \n     *  Example of a successful response:\n     *      File downloaded\n     * \n     *  Example of an unsuccessful response:\n     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      404 not found\n     *      ",
                 "operationId": "9b4ccd9fdc8c4a1c5b42ae52ceac524f",
                 "parameters": [
                     {
                         "name": "sid",
                         "in": "query",
-                        "description": "ID de sesión del usuario",
+                        "description": "User session ID",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -124,7 +124,7 @@
                     {
                         "name": "folderPath",
                         "in": "query",
-                        "description": "Ruta donde se encuentra el archivo que se desea descargar",
+                        "description": "Path where the file to be downloaded is located",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -133,7 +133,7 @@
                     {
                         "name": "fileName",
                         "in": "query",
-                        "description": "Nombre del archivo con extención que se desea",
+                        "description": "Name of the file, including extension, that you want to download",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -142,10 +142,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Archivo descargado correctamente"
+                        "description": "File downloaded successfully"
                     },
                     "404": {
-                        "description": "Contenido no encontrado: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf"
+                        "description": "Content not found: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf"
                     }
                 }
             }
@@ -155,14 +155,14 @@
                 "tags": [
                     "Folder"
                 ],
-                "summary": "Validar si una carpeta existe en una ubicación especifica",
-                "description": " \n     *  Ejemplo de request:\n     *      POST api/v1/dnda/folder/exists?sid={value}&folderPath={value}&folderName={value}\n     *               \n     *  Ejemplo de respuesta correcta:\n     *      True - Si la carpeta ya existía en la ubicación \n     * \n     *  Ejemplo de respuesta incorrecta\n     *      False - Si la carpeta no existe en la ubicación\n     *      ",
+                "summary": "Validate if a folder exists in a specific location",
+                "description": "\n     *  Example request:\n     *      POST api/v1/dnda/folder/exists?sid={value}&folderPath={value}&folderName={value}\n     *               \n     *  Example of a successful response:\n     *      True - If the folder already exists in the location\n     * \n     *  Example of an unsuccessful response:\n     *      False - If the folder does not exist in the location\n     *      ",
                 "operationId": "652710428b5c7c07513c047162f07eac",
                 "parameters": [
                     {
                         "name": "sid",
                         "in": "query",
-                        "description": "ID de sesión del usuario",
+                        "description": "User session ID",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -171,7 +171,7 @@
                     {
                         "name": "folderPath",
                         "in": "query",
-                        "description": "Ubicación de la carpeta a validar",
+                        "description": "Location of the folder to validate",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -180,7 +180,7 @@
                     {
                         "name": "folderName",
                         "in": "query",
-                        "description": "Nombre de la carpeta a validar",
+                        "description": "Name of the folder to validate",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -189,7 +189,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "True si existe la carpeta en la ubicación.",
+                        "description": "True if the folder exists in the location.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -204,7 +204,7 @@
                         }
                     },
                     "404": {
-                        "description": "False si no existe la carpeta en la ubicación.",
+                        "description": "False if the folder does not exist in the location.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -226,14 +226,14 @@
                 "tags": [
                     "Folder"
                 ],
-                "summary": "Crear una carpeta en una ubicación especificada",
-                "description": " \n     *  Ejemplo de request:\n     *      POST api/v1/dnda/folder/create?sid={value}&folderPath={value}&folderName={value}\n     *               \n     *  Ejemplo de respuesta correcta:\n     *      {\n     *          'version': '5.5.5',\n     *          'build': '20240817',\n     *          'status': 1,\n     *          'success': 'true'\n     *      }\n     * \n     *  Ejemplo de respuesta incorrecta\n     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      {\n     *          'version': '5.5.5',\n     *          'build': '20240817',\n     *          'status': 33,\n     *          'success': 'true'\n     *      }\n     * ",
+                "summary": "Create a folder in a specified location",
+                "description": "\n     *  Example request:\n     *      POST api/v1/dnda/folder/create?sid={value}&folderPath={value}&folderName={value}\n     *               \n     *  Example of a successful response:\n     *      {\n     *          'version': '5.5.5',\n     *          'build': '20240817',\n     *          'status': 1,\n     *          'success': 'true'\n     *      }\n     * \n     *  Example of an unsuccessful response:\n     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      {\n     *          'version': '5.5.5',\n     *          'build': '20240817',\n     *          'status': 33,\n     *          'success': 'true'\n     *      }\n     * ",
                 "operationId": "5634b28b0c1943447fd254d2b8cb9ee9",
                 "parameters": [
                     {
                         "name": "sid",
                         "in": "query",
-                        "description": "ID de sesión del usuario",
+                        "description": "User session ID",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -242,7 +242,7 @@
                     {
                         "name": "folderPath",
                         "in": "query",
-                        "description": "Ubicación donde se va a crear la carpeta",
+                        "description": "Location where the folder will be created",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -251,7 +251,7 @@
                     {
                         "name": "folderName",
                         "in": "query",
-                        "description": "Nombre de la carpeta a crear",
+                        "description": "Name of the folder to be created",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -260,7 +260,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Si la creación fue exitosa.",
+                        "description": "If the creation was successful.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -293,16 +293,16 @@
         "/api/v1/dnda/session/login": {
             "post": {
                 "tags": [
-                    "Sesion"
+                    "Session"
                 ],
-                "summary": "Obtenner un token Sid",
-                "description": " \n     *  Ejemplo de request:\n     *      POST api/v1/dnda/session/login?sid={value}&folderPath={value}&fileName={value}\n     *               \n     *  Ejemplo de respuesta correcta:\n     *      {Sid}\n     * \n     *  Ejemplo de respuesta incorrecta\n     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      403 Forbidden\n     *      ",
+                "summary": "Obtain a Sid token",
+                "description": "\n     *  Example request:\n     *      POST api/v1/dnda/session/login?username={value}&password={value}\n     *               \n     *  Example of a successful response:\n     *      {Sid}\n     * \n     *  Example of an incorrect response:\n     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf\n     *      403 Forbidden\n     *      ",
                 "operationId": "e1d9d60c9d395ce2a3b410f75d41489d",
                 "parameters": [
                     {
                         "name": "username",
                         "in": "query",
-                        "description": "Usuario qnap",
+                        "description": "QNAP user",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -311,7 +311,7 @@
                     {
                         "name": "password",
                         "in": "query",
-                        "description": "Clave codificada en base 64",
+                        "description": "Base64 encoded password",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -320,7 +320,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Token Sid",
+                        "description": "Sid Token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -335,7 +335,7 @@
                         }
                     },
                     "403": {
-                        "description": "Acceso Denegado"
+                        "description": "Access Denied"
                     }
                 }
             }
@@ -351,8 +351,8 @@
             "description": "Folder"
         },
         {
-            "name": "Sesion",
-            "description": "Sesion"
+            "name": "Session",
+            "description": "Session"
         }
     ]
 }

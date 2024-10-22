@@ -15,46 +15,46 @@ class SessionController extends Controller
     }
 
     /**
-     * Obtenner un token Sid
+     * Obtain a Sid token
      * @OA\Post (
      *     path="/api/v1/dnda/session/login",
-     *     tags={"Sesion"},
-     *     description=" 
-     *  Ejemplo de request:
-     *      POST api/v1/dnda/session/login?sid={value}&folderPath={value}&fileName={value}
+     *     tags={"Session"},
+     *     description="
+     *  Example request:
+     *      POST api/v1/dnda/session/login?username={value}&password={value}
      *               
-     *  Ejemplo de respuesta correcta:
+     *  Example of a successful response:
      *      {Sid}
      * 
-     *  Ejemplo de respuesta incorrecta
-     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
+     *  Example of an incorrect response:
+     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
      *      403 Forbidden
      *      ",
      *     @OA\Parameter(
      *         name="username",
      *         in="query",
      *         required=true,
-     *         description="Usuario qnap",
+     *         description="QNAP user",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="password",
      *         in="query",
      *         required=true,
-     *         description="Clave codificada en base 64",
+     *         description="Base64 encoded password",
      *         @OA\Schema(type="string")
      *     ),
      * 
      *     @OA\Response(
      *         response=200,
-     *         description="Token Sid",
+     *         description="Sid Token",
      *      @OA\JsonContent(
      *             @OA\Property(property="dasjdhsano", type="string"),
      *         )
      *     ),
      *     @OA\Response(
      *         response=403,
-     *         description="Acceso Denegado",
+     *         description="Access Denied",
      *     )
      * )
      */

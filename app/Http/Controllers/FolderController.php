@@ -16,52 +16,52 @@ class FolderController extends Controller
     }
 
     /**
-     * Validar si una carpeta existe en una ubicación especifica
+     * Validate if a folder exists in a specific location
      * @OA\Get (
      *     path="/api/v1/dnda/folder/exists",
      *     tags={"Folder"},
-     *     description=" 
-     *  Ejemplo de request:
+     *     description="
+     *  Example request:
      *      POST api/v1/dnda/folder/exists?sid={value}&folderPath={value}&folderName={value}
      *               
-     *  Ejemplo de respuesta correcta:
-     *      True - Si la carpeta ya existía en la ubicación 
+     *  Example of a successful response:
+     *      True - If the folder already exists in the location
      * 
-     *  Ejemplo de respuesta incorrecta
-     *      False - Si la carpeta no existe en la ubicación
+     *  Example of an unsuccessful response:
+     *      False - If the folder does not exist in the location
      *      ",
      * 
      *     @OA\Parameter(
      *         name="sid",
      *         in="query",
      *         required=true,
-     *         description="ID de sesión del usuario",
+     *         description="User session ID",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="folderPath",
      *         in="query",
      *         required=true,
-     *         description="Ubicación de la carpeta a validar",
+     *         description="Location of the folder to validate",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="folderName",
      *         in="query",
      *         required=true,
-     *         description="Nombre de la carpeta a validar",
+     *         description="Name of the folder to validate",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="True si existe la carpeta en la ubicación.",
+     *         description="True if the folder exists in the location.",
      *      @OA\JsonContent(
      *             @OA\Property(property="true", type="boolean"),
      *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="False si no existe la carpeta en la ubicación.",
+     *         description="False if the folder does not exist in the location.",
      *      @OA\JsonContent(
      *             @OA\Property(property="false", type="boolean"),
      *         )
@@ -93,15 +93,15 @@ class FolderController extends Controller
     }
 
     /**
-     * Crear una carpeta en una ubicación especificada
+     * Create a folder in a specified location
      * @OA\Post (
      *     path="/api/v1/dnda/folder/create",
      *     tags={"Folder"},
-     *     description=" 
-     *  Ejemplo de request:
+     *     description="
+     *  Example request:
      *      POST api/v1/dnda/folder/create?sid={value}&folderPath={value}&folderName={value}
      *               
-     *  Ejemplo de respuesta correcta:
+     *  Example of a successful response:
      *      {
      *          'version': '5.5.5',
      *          'build': '20240817',
@@ -109,8 +109,8 @@ class FolderController extends Controller
      *          'success': 'true'
      *      }
      * 
-     *  Ejemplo de respuesta incorrecta
-     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
+     *  Example of an unsuccessful response:
+     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
      *      {
      *          'version': '5.5.5',
      *          'build': '20240817',
@@ -123,26 +123,26 @@ class FolderController extends Controller
      *         name="sid",
      *         in="query",
      *         required=true,
-     *         description="ID de sesión del usuario",
+     *         description="User session ID",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="folderPath",
      *         in="query",
      *         required=true,
-     *         description="Ubicación donde se va a crear la carpeta",
+     *         description="Location where the folder will be created",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="folderName",
      *         in="query",
      *         required=true,
-     *         description="Nombre de la carpeta a crear",
+     *         description="Name of the folder to be created",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Si la creación fue exitosa.",
+     *         description="If the creation was successful.",
      *      @OA\JsonContent(
      *             @OA\Property(property="version", type="string", example="5.5.5"),
      *             @OA\Property(property="build", type="string", example="20240817"),

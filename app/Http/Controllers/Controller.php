@@ -6,9 +6,9 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(
- *     title="API de Gestión de Archivos en QNAP",
+ *     title="QNAP File Management API",
  *     version="1.0.0",
- *     description="Esta API permite la subida y descarga de archivos en un servidor QNAP, facilitando la gestión de datos. Se proporciona un ejemplo de cómo interactuar con el servidor QNAP utilizando PHP, lo que permite a los desarrolladores integrar fácilmente la gestión de archivos en sus aplicaciones.",
+ *     description="This API enables file upload and download operations on a QNAP server, facilitating data management. It provides an example of how to interact with the QNAP server using PHP, allowing developers to easily integrate file management features into their applications.",
  *     @OA\Contact(
  *         name="Deivid Medina",
  *         email="-"

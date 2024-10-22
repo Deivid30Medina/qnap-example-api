@@ -18,24 +18,24 @@ class FileController extends Controller
      * @OA\Post (
      *     path="/api/v1/dnda/files/upload",
      *     tags={"File"},
-     *     summary="Subir un archivo a QNAP",
-     *      description=" 
-     *  Ejemplo de request:
+     *     summary="Upload a file to QNAP",
+     *     description="
+     *  Example request:
      *      POST api/v1/dnda/files/upload?sid={value}&folderPath={value}
      *          
      *      form-data
      *          KEY: file
      *          VALUE: fileName.xxxx         
      * 
-     *  Ejemplo de respuesta correcta:
+     *  Example of a successful response:
      *      {
      *          'status': 1,
      *          'size': '6274227',
      *          'name': 'example.pdf'
      *      }
      * 
-     *  Ejemplo de respuesta incorrecta
-     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
+     *  Example of an unsuccessful response:
+     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
      *      {
      *          'version': '5.5.5',
      *          'build': '20240817',
@@ -51,30 +51,30 @@ class FileController extends Controller
      *                 @OA\Property(
      *                     property="sid",
      *                     type="string",
-     *                     description="ID de sesión del usuario"
+     *                     description="User session ID"
      *                 ),
      *                 @OA\Property(
      *                     property="folderPath",
      *                     type="string",
-     *                     description="Ruta de la carpeta donde se subirá el archivo"
+     *                     description="Folder path where the file will be uploaded"
      *                 ),
      *                 @OA\Property(
      *                     property="file",
      *                     type="string",
      *                     format="binary",
-     *                     description="Archivo a subir"
+     *                     description="File to upload"
      *                 ),
      *                 example={
      *                     "sid": "12345",
-     *                     "folderPath": "/mi/carpeta",
-     *                     "file": "mi_archivo.txt"
+     *                     "folderPath": "/my/folder",
+     *                     "file": "my_file.txt"
      *                 }
      *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Archivo subido correctamente",
+     *         description="File uploaded successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="1."),
      *             @OA\Property(property="size", type="string", example="4514151."),
@@ -83,7 +83,7 @@ class FileController extends Controller
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Contenido no procesable documentacion: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
+     *         description="Unprocessable content, documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
      *         @OA\JsonContent(
      *             @OA\Property(property="version", type="string", example="5.5.5"),
      *             @OA\Property(property="build", type="string", example="20240817"),
@@ -108,49 +108,49 @@ class FileController extends Controller
 
 
     /**
-     * Descargar un archivo desde la carpeta especificada
+     * Download a file from the specified folder
      * @OA\Get (
      *     path="/api/v1/dnda/files/download",
      *     tags={"File"},
-     *     description=" 
-     *  Ejemplo de request:
+     *     description="
+     *  Example request:
      *      POST api/v1/dnda/files/download?sid={value}&folderPath={value}&fileName={value}
      *               
-     *  Ejemplo de respuesta correcta:
-     *      Archivo descargado
+     *  Example of a successful response:
+     *      File downloaded
      * 
-     *  Ejemplo de respuesta incorrecta
-     *  Consulte la documentación: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
+     *  Example of an unsuccessful response:
+     *  Refer to the documentation: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf
      *      404 not found
      *      ",
      *     @OA\Parameter(
      *         name="sid",
      *         in="query",
      *         required=true,
-     *         description="ID de sesión del usuario",
+     *         description="User session ID",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="folderPath",
      *         in="query",
      *         required=true,
-     *         description="Ruta donde se encuentra el archivo que se desea descargar",
+     *         description="Path where the file to be downloaded is located",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="fileName",
      *         in="query",
      *         required=true,
-     *         description="Nombre del archivo con extención que se desea",
+     *         description="Name of the file, including extension, that you want to download",
      *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Archivo descargado correctamente",
+     *         description="File downloaded successfully",
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Contenido no encontrado: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
+     *         description="Content not found: https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf",
      *     )
      * )
      */
