@@ -19,7 +19,7 @@ class QnapService
         $this->httpClient = new Client([
             'verify' => false, // Ignorar la verificación del certificado SSL
         ]);
-        $this->nasSettings = config('nas'); 
+        $this->nasSettings = config('nas');
     }
 
     public function uploadFile(string $folderPath, UploadedFile $file, string $sid)
@@ -138,6 +138,7 @@ class QnapService
 
     public function logIn(string $username, string $password)
     {
+        // dd($url); // Puedes dejar esta línea para depuración si es necesario
         // error_log(print_r($foldersData, true));
         $url = "{$this->nasSettings['urlQnap']}/authLogin.cgi?user={$username}&pwd={$password}";
 

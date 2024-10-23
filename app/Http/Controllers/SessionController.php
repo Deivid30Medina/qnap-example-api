@@ -68,6 +68,6 @@ class SessionController extends Controller
 
         $result = $this->qnapService->logIn($request->input('username'), $request->input('password'));
 
-        return response()->json($result);
+        return $result;
     }
 }
