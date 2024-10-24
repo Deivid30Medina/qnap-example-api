@@ -1,120 +1,115 @@
 # CONFIGURACIÓN QNAP IIS
 
-## Descripción
+## Description
 
-Este proyecto se ha desarrollado utilizando Laravel v11.28.1 y PHP v8.3.6 con el objetivo de proporcionar una guía detallada sobre la configuración de un QNAP NAS para la gestión eficiente de archivos y carpetas. La aplicación se desplegará en IIS (Internet Information Services) y se centrará en la configuración adecuada del entorno IIS, así como en los posibles errores que pueden surgir durante este proceso.
+This project has been developed using Laravel v11.28.1 and PHP v8.3.6 with the aim of providing a detailed guide on setting up a QNAP NAS for efficient file and folder management. The application will be deployed on IIS (Internet Information Services) and focuses on the proper configuration of the IIS environment, as well as potential errors that may arise during the process.
 
-La guía está diseñada para ayudar a aquellos que buscan implementar un sistema de gestión de archivos utilizando un QNAP, abordando aspectos clave como la instalación, la configuración de permisos y la resolución de problemas comunes que pueden presentarse en IIS.
+This guide is designed to assist those looking to implement a file management system using a QNAP NAS, addressing key aspects such as installation, permission configuration, and troubleshooting common issues that may occur in IIS.
 
-El propósito de esta documentación es facilitar a los usuarios la comprensión y el manejo de su NAS, permitiéndoles optimizar su uso y asegurando que puedan superar obstáculos técnicos de manera efectiva. Con esta guía, espero brindar un recurso útil que apoye a la comunidad en su camino hacia la implementación exitosa de un sistema de gestión de archivos en la nube.
+The purpose of this documentation is to help users understand and manage their NAS, enabling them to optimize its use and ensuring they can effectively overcome technical challenges. With this guide, I aim to provide a valuable resource that supports the community in their journey towards the successful implementation of a cloud-based file management system.
 
-Además, se ha implementado Swagger en la aplicación, lo que permite a los usuarios explorar y visualizar la configuración de la API directamente en el código respectivo. Esto proporciona una forma interactiva de entender las rutas y los métodos disponibles, facilitando el trabajo con la API para quienes deseen profundizar en su configuración.
-
-
-## Tabla de Contenido
+Additionally, Swagger has been implemented in the application, allowing users to explore and visualize the API configuration directly in the respective code. This offers an interactive way to understand the available routes and methods, making it easier for those who wish to dive deeper into the API's setup.
 
 ## Tabla de Contenidos
-1. [Descripción](#descripción)
-2. [Requisitos previos](#requisitos-previos)
-3. [Creación del Proyecto Laravel](#creación-del-proyecto-laravel)
-4. [Uso de Git](#uso-de-git)
-5. [Configuración del Entorno](#configuración-del-entorno)
-    - [Instalación de Dependencias](#1-instalación-de-dependencias)
-    - [Configuración archivo .ini](#2-configuración-archivo-ini)
-    - [Creación del Archivo .env](#3-creación-del-archivo-env)
-    - [Generación de APP_KEY](#4-generación-de-app_key)
-6. [Configuración de IIS](#configuración-de-iis)
-    - [Configuración de web.config](#qué-es-webconfig)
-    - [Creación de un Pool de Aplicaciones](#qué-es-un-grupo-de-aplicaciones-en-iis)
-    - [Creación de un Nuevo Sitio Web](#configuración-del-nuevo-sitio-web)
-7. [Configuración del Document Default](#configuración-del-document-default)
-8. [Handler Mapping](#manejo-de-mapeo-de-controladores-handler-mapping)
-9. [Configuración de Hosts y Dominio](#configuración-de-hosts-y-dominio)
-10. [Acceso a la aplicación](#acceso-a-la-aplicación)
-11. [Resolución de Problemas](#resolución-de-problemas)
+
+1. [Description](#description)
+2. [Requisitos previos](#prerequisites)
+3. [Creación del Proyecto Laravel](#creating-the-laravel-project)
+4. [Uso de Git](#using-git)
+5. [Configuración del Entorno](#environment-setup)
+    - [Instalación de Dependencias](#1-installing-dependencies)
+    - [Configuración archivo .ini](#2-configuring-the-ini-file)
+    - [Creación del Archivo .env](#3-creating-the-env-file)
+    - [Generación de APP_KEY](#4-generating-app_key)
+6. [Configuración de IIS](#iis-configuration)
+    - [Configuración de web.config](#what-is-webconfig)
+    - [Creación de un Pool de Aplicaciones](#what-is-an-application-pool-in-iis)
+    - [Creación de un Nuevo Sitio Web](#configuring-the-new-website)
+7. [Configuración del Document Default](#configuring-the-default-document)
+8. [Handler Mapping](#handler-mapping-configuration)
+9. [Configuración de Hosts y Dominio](#hosts-and-domain-configuration)
+10. [Acceso a la aplicación](#accessing-the-application)
+11. [Resolución de Problemas](#troubleshooting)
     - [DNS_PROBE_FINISHED_NXDOMAIN](#1-dns_probe_finished_nxdomain)
     - [Failed to open stream: Permission denied](#2-storageframeworkviews2a6b197af13a60869ebf5cbe9f5f7eafphp-failed-to-open-stream-permission-denied)
     - [Curl error. Failed to connect yourDomain](#3-curl-error-failed-to-connect-yourdomain-port-xxx-after-21021-ms-couldnt-connect-to-server)
-12. [Solucion de problemas](#solución-de-problemas)
-    - [DNS_PROBE_FINISHED_NXDOMAIN](#1-dns_probe_finished_nxdomain-soluction)
-    - [Failed to open stream: Permission denied](#2-failed-to-open-stream-permission-denied-soluction)
-    - [Curl error. Failed to connect yourDomain](#3-failed-to-connect-to-yourdomain-port-xxx-after-21021-ms-soluction)
+12. [Solucion de problemas](#troubleshooting-solutions)
+    - [DNS_PROBE_FINISHED_NXDOMAIN SOLUTION](#1-dns_probe_finished_nxdomain-solution)
+    -   [Failed to open stream: Permission denied SOLUTION](#2-failed-to-open-stream-permission-denied-solution)
+    -   [Failed to connect to yourDomain port xxx after 21021 ms SOLUTION](#3-failed-to-connect-to-yourdomain-port-xxx-after-21021-ms-solution)
+
 13. [Swagger](#swagger)
-14. [Conclusiones](#conclusiones)
+14. [Conclusiones](#conclusions)
 
+### Prerequisites
 
+Before starting this project or any similar one, it is important to ensure that the following tools and technologies are properly installed and configured
 
-### Requisitos Previos
+1. **[PHP](https://www.php.net/)**: This is the programming language used by Laravel. Make sure you have a version compatible with Laravel installed to run the project correctly.
 
-Antes de comenzar con este proyecto o cualquier otro similar, es importante asegurarse de que las siguientes herramientas y tecnologías estén instaladas y configuradas correctamente:
+2. **[Composer](https://getcomposer.org/)**: Composer is a dependency manager for PHP. Laravel relies on Composer to manage packages and libraries, so having it installed is crucial before getting started.
 
-1. **[PHP](https://www.php.net/)**: Es el lenguaje de programación utilizado por Laravel. Asegúrate de tener instalada una versión compatible con Laravel para ejecutar el proyecto correctamente.
-   
-2. **[Composer](https://getcomposer.org/)**: Es un gestor de dependencias para PHP. Laravel depende de Composer para gestionar paquetes y librerías, por lo que es fundamental tenerlo instalado antes de empezar.
+3. **[IIS (Internet Information Services)](https://learn.microsoft.com/es-es/iis/get-started/introduction-to-iis/iis-web-server-overview)**: This is Microsoft’s web server used to host the Laravel application in this project. It’s essential to configure it properly for your application to function correctly.
 
-3. **[IIS (Internet Information Services)](https://learn.microsoft.com/es-es/iis/get-started/introduction-to-iis/iis-web-server-overview)**: Es el servidor web de Microsoft utilizado para alojar la aplicación Laravel en este proyecto. Es crucial configurarlo adecuadamente para que tu aplicación funcione correctamente.
+4. **[Visual Studio Code (Opcional)](https://code.visualstudio.com/)**: A lightweight and powerful code editor, recommended for writing and editing PHP code and other configuration files. Although optional, it can greatly simplify the development and configuration process.
 
-4. **[Visual Studio Code (Opcional)](https://code.visualstudio.com/)**: Es un editor de código ligero y poderoso, recomendado para escribir y editar código PHP y otros archivos de configuración. Aunque es opcional, puede facilitar mucho el proceso de desarrollo y configuración.
+5. **[WinCache Extension for PHP (Opcional)](https://sourceforge.net/projects/wincache/)**: This is a caching module specifically optimized for Windows environments. Its main purpose is to enhance the performance of PHP applications by caching PHP scripts.
 
-5. **[WinCache Extension for PHP (Opcional)](https://sourceforge.net/projects/wincache/)**: Módulo de caché optimizado específicamente para entornos Windows. Su propósito principal es mejorar el rendimiento de las aplicaciones PHP al almacenar en caché los scripts PHP.
+6. **[IIS URL Rewrite (Opcional)](https://www.iis.net/downloads/microsoft/url-rewrite)**: This tool allows web administrators to create effective rules to implement URLs that are easier for users to remember and for search engines to find.
 
-6. **[IIS URL Rewrite (Opcional)](https://www.iis.net/downloads/microsoft/url-rewrite)**: Permite a los administradores web crear reglas eficaces para implementar direcciones URL que sean más fáciles de recordar para los usuarios y de encontrar para los motores de búsqueda.
+## Creating the Laravel Project
 
+[Laravel](https://laravel.com/) is a modern and robust PHP framework designed to simplify web application development, including REST APIs, using an elegant and expressive syntax. It is widely used due to its focus on simplicity, security, and fast development.
+For more details on how to create a Laravel project from scratch, you can consult the [official documentation.](https://laravel.com/docs/11.x). This guide provides step-by-step instructions on installing Laravel and configuring your development environment, allowing you to start developing your application efficiently.
 
-## Creación del Proyecto Laravel
+In this project, Laravel was used to create a **API REST** that enables the management and consumption of services for the **QNAP NAS** system according to its [official documentation.](https://download.qnap.com/dev/QNAP_QTS_File_Station_API_v5.pdf) with a few adjustments. Throughout this document, we will explore how the API was developed and configured to meet the specific requirements of this environment.
 
-[Laravel](https://laravel.com/) es un framework de PHP moderno y robusto, diseñado para facilitar el desarrollo de aplicaciones web, incluyendo APIs REST, mediante una sintaxis elegante y expresiva. Es ampliamente utilizado por su enfoque en la simplicidad, la seguridad y la rapidez en el desarrollo.
+## Using Git
 
-Para obtener más detalles sobre cómo crear un proyecto Laravel desde cero, puedes consultar la [documentación oficial](https://laravel.com/docs/11.x). En esta guía encontrarás instrucciones paso a paso para instalar Laravel y configurar tu entorno de desarrollo, lo que te permitirá empezar a desarrollar tu aplicación de manera eficiente.
-
-En este proyecto, se utilizó Laravel para crear una **API REST** que permite la gestión y consumo de servicios del sistema **QNAP NAS** de acorde a su [documentación oficial]() con unos pequeños ajustes. A lo largo de este documento, veremos cómo se desarrolló la API y se configuró para cumplir con los requerimientos específicos de este entorno.
-
-## Uso de Git
-
-Puedes descargar este proyecto por medio del siguiente comando.
+You can download this project using the following command.
 
 ```bash
 git clone https://github.com/Deivid30Medina/qnap-example-api.git
 ```
 
-## Configuración del Entorno
+## Environment Setup
 
-Una vez descargado el proyecto utilizando `git clone`, debes seguir estos pasos para configurar correctamente el entorno:
+Once you have downloaded the project using `git clone`, follow these steps to properly configure the environment:
 
-### 1. Instalación de `Dependencias`
+### 1. Installing `Dependencies`
 
-- Navega al directorio del proyecto donde hiciste el `git clone` y ejecuta el siguiente comando para instalar todas las dependencias necesarias:
+-   Navigate to the project directory where you ran `git clone` and execute the following command to install all the necessary dependencies:
 
     ```bash
     composer install
     ```
 
-### 2. Configuración archivo `.ini`
+### 2. Configuring the `.ini` file
 
-Recuerda que también se deben habilitar ciertas extensiones en el archivo `php.ini`, específicamente:
+Remember that certain extensions must also be enabled in the `php.ini` file, specifically:
 
-- Asegúrate de que la directiva `extension_dir` esté configurada como `"ext"`.
+-   Ensure that the `extension_dir` directive is set to `"ext"`.
 
-- Descomenta (elimina el `;` al principio de la línea) cualquier extensión necesaria, tales como:
+-   Uncomment (remove the `;` at the beginning of the line) any necessary extensions, such as:
 
-   - `php_curl.dll`
-   - `php_gettext.dll`
-   - `php_mysqli.dll`
-   - `php_mbstring.dll`
-   - `php_gd.dll`
-   - `php_fileinfo.dll`
-   - `php_pdo_mysql.dll`
-   - `php_pdo_pgsql.dll`
-   - `php_pgsql.dll`
-   - `php_intl.dll`
+    -   `php_curl.dll`
+    -   `php_gettext.dll`
+    -   `php_mysqli.dll`
+    -   `php_mbstring.dll`
+    -   `php_gd.dll`
+    -   `php_fileinfo.dll`
+    -   `php_pdo_mysql.dll`
+    -   `php_pdo_pgsql.dll`
+    -   `php_pgsql.dll`
+    -   `php_intl.dll`
 
-Habilitar estas extensiones es fundamental para asegurar que tu aplicación Laravel funcione correctamente, ya que proporcionan funcionalidades esenciales para la conexión a bases de datos, manejo de cadenas y más.
+Enabling these extensions is crucial to ensure your Laravel application functions properly, as they provide essential features for database connections, string handling, and more.
 
-### 3. Creación del Archivo `.env`
+### 3. Creating the `.env` File
 
-Laravel utiliza un archivo `.env` para gestionar las variables de entorno del proyecto. Debes crear este archivo en la raíz del proyecto, copiando el contenido del archivo `.env.example` que viene por defecto con Laravel.
+Laravel uses a `.env` file to manage the project’s environment variables. You need to create this file in the root of the project by copying the contents of the `.env.example` file that comes with Laravel by default.
 
-    A continuación se muestra una configuración de ejemplo del archivo `.env` con las variables necesarias para este proyecto:
+Here is an example configuration for the `.env` file with the necessary variables for this project:
 
     ```env
     APP_NAME=Laravel
@@ -144,28 +139,28 @@ Laravel utiliza un archivo `.env` para gestionar las variables de entorno del pr
     Las dos últimas variables son específicas de este proyecto y permiten:
 
     - `NAS_URL_QNAP`: Definir la URL del sistema **QNAP** que se utilizará para consumir sus servicios.
-    
+
     - `L5_SWAGGER_GENERATE_ALWAYS`: Forzar la regeneración de la documentación de **Swagger** automáticamente.
 
-### 4. Generación de `APP_KEY`
+### 4. Generating `APP_KEY`
 
-Luego de configurar el archivo `.env`, debes generar la clave de la aplicación, que se utiliza para cifrar datos y asegurar el sistema. Para ello, ejecuta el siguiente comando:
+After configuring the `.env` file, you need to generate the application key, which is used to encrypt data and secure the system. To do this, run the following command:
 
     ```bash
     php artisan key:generate
     ```
 
-    Este comando actualizará la variable `APP_KEY` con un valor único y seguro en tu archivo `.env`.
+This command will update the `APP_KEY` variable with a unique and secure value in your `.env` file.
 
-## Configuración de IIS
+## IIS Configuration
 
-En este proyecto, la carpeta `public` es la que utilizaremos para crear un nuevo sitio web en IIS. Es importante colocar el archivo `web.config` dentro de esta carpeta. Si prefieres almacenar el `web.config` en otra ubicación, puedes hacerlo, pero necesitarás ajustar las configuraciones en consecuencia.
+In this project, the `public` folder is the one we will use to create a new website in IIS. It is important to place the `web.config` file inside this folder. If you prefer to store the `web.config` file in another location, you can do so, but you will need to adjust the settings accordingly.
 
-### Qué es `web.config`
+### What is `web.config`
 
-El archivo `web.config` es crucial para configurar la reescritura de URL, los mapeos de controladores y otros ajustes necesarios para que tu proyecto Laravel funcione correctamente en IIS. Permite que IIS gestione el enrutamiento y dirija las solicitudes a los recursos correctos. Sin él, el sistema de enrutamiento de Laravel no funcionaría como se espera, especialmente para manejar URLs amigables y rutas dinámicas.
+The `web.config` file is crucial for configuring URL rewriting, controller mappings, and other settings necessary for your Laravel project to function properly on IIS. It allows IIS to manage routing and direct requests to the correct resources. Without it, Laravel’s routing system would not work as expected, especially when handling friendly URLs and dynamic routes.
 
-Aquí hay un ejemplo de archivo `web.config` para este proyecto:
+Here is an example `web.config` file for this project:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -174,7 +169,7 @@ Aquí hay un ejemplo de archivo `web.config` para este proyecto:
         <rewrite>
             <rules>
 
-                <!-- 
+                <!--
                 Rule 1: Remove trailing '/' from the URL
                 This rule ensures that URLs ending with a slash are redirected to the same URL without the trailing slash.
                 Example: /example/ becomes /example
@@ -188,7 +183,7 @@ Aquí hay un ejemplo de archivo `web.config` para este proyecto:
                     <action type="Redirect" redirectType="Permanent" url="{R:1}" />
                 </rule>
 
-                <!-- 
+                <!--
                 Rule 2: Rewrite request if the file or directory does not exist.
                 If a requested file or directory doesn't exist, the request will be rewritten to go through "index.php".
                 This is useful for routing systems in frameworks like Laravel that rely on friendly URLs.
@@ -212,278 +207,274 @@ Aquí hay un ejemplo de archivo `web.config` para este proyecto:
 
 ```
 
-### Qué es un Grupo de Aplicaciones en IIS
+### What is an Application Pool in IIS
 
-Un **Grupo de Aplicaciones** en IIS es una configuración que permite aislar diferentes aplicaciones que se ejecutan en el servidor. Es importante porque ayuda a gestionar los recursos que utiliza cada aplicación y mejora la seguridad al mantener las aplicaciones independientes entre sí. Cada grupo se ejecuta bajo una identidad específica, lo que te permite controlar cómo cada aplicación web accede a los recursos del sistema.
+An **Application Pool** in IIS is a configuration that allows you to isolate different applications running on the server. It’s important because it helps manage the resources each application uses and enhances security by keeping the applications independent from one another. Each pool runs under a specific identity, allowing you to control how each web application accesses system resources.
 
+### Steps to Create a New Application Pool
 
-### Pasos para Crear un Nuevo Grupo de Aplicaciones
+**Creating a New Application Pool**: Open the IIS Manager and click on the **Application Pools** section. To create a new pool, follow these steps:
 
-**Creando un Nuevo Grupo de Aplicaciones**: Abre el Administrador de IIS y haz clic en la sección de **Grupos de Aplicaciones**. Para crear un nuevo grupo, sigue estos pasos:
+1. Click on **Add Application Pool** on the right-hand side.
 
-1. Haz clic en **Agregar Grupo de Aplicaciones** en el lado derecho.
+    ![Correct Search App](./public/assets/imgs/1.pool.png "Correct Search App.")
 
-   ![Aplicativo Búsqueda Correcta](./public/assets/imgs/1.pool.png "Aplicativo Búsqueda Correcta.")
+2. Provide a name for the pool (e.g., "qnap-example").
 
-2. Proporciona un nombre para el grupo (por ejemplo, "qnap-example").
+    ![Correct Search App](./public/assets/imgs/2.ConfigQnap.png "Correct Search App.")
 
-   ![Aplicativo Búsqueda Correcta](./public/assets/imgs/2.ConfigQnap.png "Aplicativo Búsqueda Correcta.")
+3. Set the **.NET CLR Version** to **No Managed Code**.
 
-3. Establece la **versión de .NET CLR** en **Sin Código Administrado**.
+4. Ensure the option **Start application pool immediately** is checked.
 
-4. Asegúrate de que la opción **Iniciar el grupo de aplicaciones de inmediato** esté seleccionada.
+### Configuring the New Website
 
-### Configuración del Nuevo Sitio Web
+After configuring the pool, the next step is to create the new website in IIS:
 
-Después de configurar el grupo, el siguiente paso es crear el nuevo sitio web en IIS:
+1. Right-click on **Sites** in IIS Manager and select **Add Website**.
 
-1. Haz clic derecho en **Sitios** en el Administrador de IIS y selecciona **Agregar Sitio Web**.
+    ![Correct Search App](./public/assets/imgs/3.newSite.png "Correct Search App.")
 
-   ![Aplicativo Búsqueda Correcta](./public/assets/imgs/3.newSite.png "Aplicativo Búsqueda Correcta.")
+2. Choose the **Application Pool** you created earlier.
 
-2. Elige el **Grupo de Aplicaciones** que creaste anteriormente.
+    ![Correct Search App](./public/assets/imgs/4.ConfigNewSite.png "Correct Search App.")
 
-   ![Aplicativo Búsqueda Correcta](./public/assets/imgs/4.%20ConfigNewSite.png "Aplicativo Búsqueda Correcta.")
+3. Set the **physical path** to the `public` folder of your Laravel project.
 
-3. Establece la **ruta física** en la carpeta `public` de tu proyecto Laravel.
+**Selecting the Public Folder**: In the **Physical Path** section, browse for the `public` folder of your Laravel project.
 
-**Selección de la Carpeta Pública**: En la sección de **Ruta Física**, busca la carpeta `public` de tu proyecto Laravel.
+![Correct Search App](./public/assets/imgs/5.pathNewSite.png "Correct Search App.")
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/5.pathNewSite.png "Aplicativo Búsqueda Correcta.")
+**Finalizing Configuration**: Once all configurations are complete, click **OK** or **Apply** to finalize and create the new website.
 
-**Finalizar Configuración**: Una vez que todas las configuraciones estén completas, haz clic en **Aceptar** o **Aplicar** para finalizar y crear el nuevo sitio web.
+You should now see the newly created website in IIS Manager.
 
-Ahora deberías ver el sitio web recién creado en el Administrador de IIS.
+## Configuring the Default Document
 
-## Configuración del Document Default
+The **Default Document** in IIS is a critical configuration that defines the default file that will load when a user accesses a URL without specifying a concrete file. For example, when someone visits `http://yourdomain.com/`, the server needs to know which file to serve by default, and this is where the Default Document comes into play.
 
-El **Document Default** en IIS es una configuración crucial que define el archivo predeterminado que se cargará cuando un usuario accede a una URL sin especificar un archivo concreto. Por ejemplo, cuando alguien visita `http://yourdomain.com/`, el servidor necesita saber qué archivo debe servir por defecto, y aquí es donde entra en juego el Document Default.
+### Why is it important?
 
-### ¿Por qué es importante?
+Configuring the Default Document correctly ensures that the web server delivers the right page to visitors, avoiding 404 errors or navigation issues. If a start file (such as `index.php` or `Default.php`) isn’t specified, IIS might not know which file to load and will return an error.
 
-Configurar correctamente el Document Default garantiza que el servidor web entregue la página correcta a los visitantes, evitando errores 404 o problemas de navegación. Si no se especifica un archivo de inicio (como `index.php` o `Default.php`), IIS podría no saber qué archivo cargar y devolverá un error.
+### Files to configure
 
-### Archivos a configurar
+For a Laravel project, it is crucial to configure the following files as defaults in IIS’s Default Document settings:
 
-Para un proyecto Laravel, es fundamental configurar los siguientes archivos como predeterminados en el Document Default de IIS:
+-   **index.php**: Laravel uses `index.php` as the entry point for most HTTP requests. All routes and controllers in your application are processed through this file.
 
-- **index.php**: Laravel usa `index.php` como el punto de entrada para la mayoría de las solicitudes HTTP. Todas las rutas y controladores de tu aplicación son procesados a través de este archivo.
-- **Default.php**: Aunque Laravel no usa directamente `Default.php`, es una buena práctica agregarlo como un fallback, ya que algunos servidores pueden buscar este archivo si `index.php` no está configurado adecuadamente.
+-   **Default.php**: Although Laravel doesn’t directly use `Default.php`, it’s good practice to add it as a fallback, as some servers might look for this file if `index.php` isn’t properly configured.
 
-### ¿Cómo configurarlo?
+### How to Configure It?
 
-1. En el Administrador de IIS, selecciona el sitio web que acabas de crear.
-2. Haz clic en **Default Document** en la parte central de la ventana.
+1. In the IIS Manager, select the website you just created.
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/6.DefaultFileRun.png "Aplicativo Búsqueda Correcta.")
+2. Click on **Default Document** in the center of the window.
 
-3. Asegúrate de que `index.php` y `Default.php` están listados como documentos predeterminados.
+    ![Correct Search App](./public/assets/imgs/6.DefaultFileRun.png "Correct Search App.")
 
-4. Si alguno de estos no está presente, haz clic en **Add** y añádelos manualmente.
+3. Ensure that `index.php` and `Default.php` are listed as default documents.
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/7.ConfigDefaultFileRun.png "Aplicativo Búsqueda Correcta.")
+4. If any of these are not present, click **Add** and add them manually.
 
-Esto garantizará que el servidor web cargue tu aplicación correctamente cuando un usuario acceda a tu sitio sin especificar una página.
+    ![Correct Search App](./public/assets/imgs/7.ConfigDefaultFileRun.png "Correct Search App.")
 
-## Manejo de Mapeo de Controladores (Handler Mapping)
+This will ensure that the web server loads your application correctly when a user accesses your site without specifying a page.
 
-El **Handler Mapping** en IIS es una configuración que indica cómo el servidor debe procesar ciertos tipos de archivos, como los archivos `.php`. Esto es esencial para que las solicitudes que involucren scripts PHP sean enviadas correctamente al procesador adecuado (en este caso, PHP), permitiendo que el servidor ejecute el código y devuelva el resultado al cliente.
+## Handler Mapping Configuration
 
-### ¿Por qué es importante?
+**Handler Mapping** in IIS is a configuration that tells the server how to process certain types of files, such as `.php` files. This is essential for requests involving PHP scripts to be correctly forwarded to the appropriate processor (in this case, PHP), allowing the server to execute the code and return the result to the client.
 
-Configurar el Handler Mapping es fundamental para que IIS pueda manejar y procesar archivos PHP correctamente. Sin esta configuración, el servidor no podrá ejecutar el código PHP y devolverá errores cuando se intente acceder a scripts PHP.
+### Why is it important?
 
-### Pasos para validar y configurar el Handler Mapping para PHP
+Configuring the Handler Mapping is critical for IIS to properly handle and process PHP files. Without this configuration, the server will not be able to execute PHP code and will return errors when attempting to access PHP scripts.
 
-1. **Verificación del Handler existente**:
-   - Antes de crear un nuevo Handler, primero debemos comprobar si ya existe uno configurado para PHP.
-   - En IIS, selecciona tu sitio web y navega a la opción **Handler Mappings**.
+### Steps to Validate and Configure the Handler Mapping for PHP
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/8.HandlerMapping.png "Aplicativo Búsqueda Correcta.")
+1. **Verifying the Existing Handler**:
 
-   - Busca un handler asociado a **PHP**. Si lo encuentras, valida que esté apuntando a la versión correcta de PHP que tienes instalada.
+    - Before creating a new handler, first, we need to check if one is already configured for PHP.
+    - In IIS, select your website and navigate to the **Handler Mappings** option.
 
+        ![Correct Search App](./public/assets/imgs/8.HandlerMapping.png "Correct Search App.")
 
-   - Para verificar la versión de PHP en tu sistema, puedes ejecutar el siguiente comando en la línea de comandos:
+    - Look for a handler associated with **PHP**. If you find one, make sure it points to the correct PHP version installed on your system.
 
-     ```bash
-     php -v
-     ```
+    - To verify the PHP version on your system, you can run the following command in the command line:
 
-   - Si la versión no coincide con la instalada en tu sistema o si el handler está mal configurado, elimínalo para evitar conflictos.
+        ```bash
+        php -v
+        ```
 
-2. **Agregar un nuevo Handler para PHP**:
+    - If the version does not match the one installed or if the handler is misconfigured, delete it to avoid conflicts.
 
-   - Si no tienes un handler configurado para PHP, sigue estos pasos para agregar uno nuevo:
+2. **Adding a New Handler for PHP**:
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/9.WithoutPhp.png "Aplicativo Búsqueda Correcta.")
+    - If you do not have a handler configured for PHP, follow these steps to add a new one:
 
-     1. En **Handler Mappings**, selecciona **Add Module Mapping**.
+        ![Correct Search App](./public/assets/imgs/9.WithoutPhp.png "Correct Search App.")
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/10.AddModule.png "Aplicativo Búsqueda Correcta.")
+        1. In **Handler Mappings**, select **Add Module Mapping**.
 
+            ![Correct Search App](./public/assets/imgs/10.AddModule.png "Correct Search App.")
 
-     2. En el campo **Request Path**, ingresa `*.php` para indicar que este handler debe procesar todos los archivos `.php`.
+        2. In the **Request Path** field, enter `*.php` to indicate that this handler should process all `.php` files.
 
-     3. En **Module**, selecciona **FastCgiModule**.
+        3. In **Module**, select **FastCgiModule**.
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/11.HandlerMappingConfigOne.png "Aplicativo Búsqueda Correcta.")
+            ![Correct Search App](./public/assets/imgs/11.HandlerMappingConfigOne.png "Correct Search App.")
 
-     
-     4. En **Executable**, busca y selecciona el archivo `php-cgi.exe`, que normalmente se encuentra en la ruta donde tienes instalada tu versión de PHP (por ejemplo: `C:\php-8.3.6\php-cgi.exe`).
+        4. In **Executable**, find and select the `php-cgi.exe` file, which is typically located in the directory where your PHP version is installed (e.g., `C:\php-8.3.6\php-cgi.exe`).
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/12.HandlerMappingConfigTwo.png "Aplicativo Búsqueda Correcta.")
+            ![Correct Search App](./public/assets/imgs/12.HandlerMappingConfigTwo.png "Correct Search App.")
 
-     
-     5. En **Name**, ingresa un nombre descriptivo como `PHP 8.3.6` para identificar la versión de PHP que estás configurando.
+        5. In **Name**, enter a descriptive name like `PHP 8.3.6` to identify the PHP version you are configuring.
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/13.HandlerMappingConfigThree.png "Aplicativo Búsqueda Correcta.")
+            ![Correct Search App](./public/assets/imgs/13.HandlerMappingConfigThree.png "Correct Search App.")
 
-     
-3. **Confirmación y validación**:
-   - Una vez completados los pasos anteriores, haz clic en **OK** y luego confirma nuevamente cuando se te solicite.
+3. **Confirmation and Validation**:
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/14.HandlerMappingConfigFour.png "Aplicativo Búsqueda Correcta.")
+    - Once you have completed the steps above, click **OK** and confirm again when prompted.
 
+        ![Correct Search App](./public/assets/imgs/14.HandlerMappingConfigFour.png "Correct Search App.")
 
-   - Verifica que el nuevo handler se haya agregado correctamente en la lista de **Handler Mappings**.
+    - Verify that the new handler has been added correctly in the **Handler Mappings** list.
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/14.HandlerMappingFinish.png "Aplicativo Búsqueda Correcta.")
+        ![Correct Search App](./public/assets/imgs/14.HandlerMappingFinish.png "Correct Search App.")
 
-   - Puedes comprobar que está funcionando correctamente probando la ejecución de un script PHP en tu sitio.
+    - You can check if it is working correctly by testing the execution of a PHP script on your site.
 
-Con esta configuración adecuada, te aseguras de que IIS maneje y ejecute correctamente los archivos PHP en tu aplicación.
+With this proper configuration, you ensure that IIS handles and correctly executes PHP files in your application.
 
+## Hosts and Domain Configuration
 
-## Configuración de Hosts y Dominio
+If you do not have an acquired domain, you can configure your system's `hosts` file to simulate a local domain. This file allows your computer to associate a domain name with a specific IP address, making it easier to access your development application through a name instead of using the IP address directly.
 
-En caso de que no tengas un dominio adquirido, puedes configurar el archivo `hosts` de tu sistema para simular un dominio local. Este archivo permite que tu computadora asocie un nombre de dominio con una dirección IP específica, facilitando el acceso a tu aplicación en desarrollo a través de un nombre en lugar de utilizar la dirección IP directamente.
+### Steps to Configure the hosts File:
 
-### Pasos para configurar el archivo hosts:
+1. **Open the hosts file**:
 
-1. **Abrir el archivo hosts**:
-   - En Windows, el archivo se encuentra en `C:\Windows\System32\drivers\etc\hosts`.
-   - Puedes abrirlo con un editor de texto como el Bloc de notas. Asegúrate de ejecutarlo como administrador para tener permisos de escritura.
+    - On Windows, the file is located at `C:\Windows\System32\drivers\etc\hosts`.
+    - You can open it with a text editor like Notepad. Make sure to run it as an administrator to have write permissions.
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/15ConfigHost.png "Aplicativo Búsqueda Correcta.")
+        ![Correct Search Application](./public/assets/imgs/15ConfigHost.png "Correct Search Application.")
 
-2. **Agregar el dominio**:
-   - Al final del archivo, agrega una línea en el siguiente formato:
+2. **Add the domain**:
 
-     ```
-     127.0.0.1    yourDomain.com
-     ```
+    - At the end of the file, add a line in the following format:
 
-   - Reemplaza `yourDomain.com` con el dominio que deseas usar para tu aplicación.
+        ```
+        127.0.0.1    yourDomain.com
+        ```
 
-        ![Aplicativo Búsqueda Correcta](./public/assets/imgs/16.AddDomainExample.png "Aplicativo Búsqueda Correcta.")
+    - Replace `yourDomain.com` with the domain you want to use for your application.
 
+        ![Correct Search Application](./public/assets/imgs/16.AddDomainExample.png "Correct Search Application.")
 
-3. **Guardar los cambios**:
+3. **Save the changes**:
 
-   - Después de agregar la línea, guarda el archivo. Si estás usando un editor de texto como el Bloc de notas, es posible que debas seleccionar "Todos los archivos" en el cuadro de tipo de archivo para poder guardar correctamente.
+    - After adding the line, save the file. If you are using a text editor like Notepad, you may need to select "All Files" in the file type box to save it correctly.
 
-### Acceso a la aplicación
+### Accessing the Application
 
-Una vez que hayas configurado el archivo `hosts`, podrás acceder a tu aplicación a través del dominio que has especificado en tu navegador, utilizando la URL `http://yourDomain.com`. Esto te permitirá probar tu aplicación como si estuvieras utilizando un dominio real, facilitando el proceso de desarrollo y pruebas.
+Once you have configured the `hosts` file, you will be able to access your application through the domain you specified in your browser, using the URL `http://yourDomain.com`. This will allow you to test your application as if you were using a real domain, facilitating the development and testing process.
 
-Con esta configuración, podrás simular el acceso a tu aplicación como si estuvieras utilizando un dominio real, lo que es especialmente útil durante el desarrollo.
+With this configuration, you can simulate access to your application as if you were using a real domain, which is especially useful during development.
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/18.SuccesLaravel.png "Aplicativo Búsqueda Correcta.")
+![Correct Search Application](./public/assets/imgs/18.SuccesLaravel.png "Correct Search Application.")
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/19.SuccesLaravelSwagger.png "Aplicativo Búsqueda Correcta.")
+![Correct Search Application](./public/assets/imgs/19.SuccesLaravelSwagger.png "Correct Search Application.")
 
-## Resolución de Problemas
+## Troubleshooting
 
-En este apartado, se describen algunos errores comunes que pueden surgir durante la configuración y ejecución de tu aplicación Laravel en IIS.
+This section describes some common errors that may arise during the configuration and execution of your Laravel application on IIS.
 
 ### 1. `DNS_PROBE_FINISHED_NXDOMAIN`
-Este error indica que el dominio que estás intentando acceder no se puede resolver a una dirección IP. Esto suele ocurrir cuando el dominio no está configurado correctamente en el archivo `hosts` o no se ha propagado en el sistema DNS.
 
-**Solución**: Para más detalles sobre cómo resolver este problema, consulta la sección [Soluciones para DNS_PROBE_FINISHED_NXDOMAIN](#soluciones-para-dns_probe_finished_nxdomain).
+This error indicates that the domain you are trying to access cannot be resolved to an IP address. This often occurs when the domain is not properly configured in the `hosts` file or has not propagated in the DNS system.
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/17.ErrDomain.png "Aplicativo Búsqueda Correcta.")
+**Solution**: For more details on how to resolve this issue, refer to the section [Solutions for DNS_PROBE_FINISHED_NXDOMAIN](#solutions-for-dns_probe_finished_nxdomain).
 
+![Correct Search Application](./public/assets/imgs/17.ErrDomain.png "Correct Search Application.")
 
 ### 2. `\storage\framework\views/2a6b197af13a60869ebf5cbe9f5f7eaf.php: Failed to open stream: Permission denied`
 
-Este error sugiere que el servidor web no tiene permisos adecuados para acceder a los archivos en la carpeta de almacenamiento de Laravel. 
+This error suggests that the web server does not have the appropriate permissions to access files in the Laravel storage folder.
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/postibleErr.png "Aplicativo Búsqueda Correcta.")
+![Correct Search Application](./public/assets/imgs/postibleErr.png "Correct Search Application.")
 
-**Solución**: Puedes encontrar más información sobre cómo solucionar problemas de permisos en la sección [Soluciones para permisos en Laravel](#soluciones-para-permisos-en-laravel).
+**Solution**: You can find more information on how to resolve permission issues in the section [Solutions for Permissions in Laravel](#solutions-for-permissions-in-laravel).
 
 ### 3. `Curl error. Failed to connect yourDomain port xxx after 21021 ms: Couldn't connect to server.`
 
-Este error ocurre cuando la aplicación no puede establecer una conexión con el servidor QNAP. Puede deberse a varios factores, como un puerto incorrecto, un servidor QNAP no accesible, o problemas de red.
+This error occurs when the application cannot establish a connection with the QNAP server. It may be due to various factors, such as an incorrect port, an inaccessible QNAP server, or network issues.
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/errorNas.png "Aplicativo Búsqueda Correcta.")
+![Correct Search Application](./public/assets/imgs/errorNas.png "Correct Search Application.")
 
-**Solución**: Para más información sobre cómo solucionar este problema, visita la sección [Soluciones para problemas de conexión con QNAP](#soluciones-para-problemas-de-conexion-con-qnap).
+**Solution**: For more information on how to resolve this issue, visit the section [Solutions for Connection Issues with QNAP](#solutions-for-connection-issues-with-qnap).
 
-## Solución de Problemas
+## Troubleshooting Solutions
 
-### 1. DNS_PROBE_FINISHED_NXDOMAIN SOLUCTION
+### 1. DNS_PROBE_FINISHED_NXDOMAIN SOLUTION
 
-Este error indica que el dominio que estás tratando de acceder no se puede resolver a una dirección IP. Esto puede ocurrir por varias razones, como una configuración incorrecta del DNS o que el dominio no esté definido correctamente. Para solucionar este problema:
+This error indicates that the domain you are trying to access cannot be resolved to an IP address. This can occur for several reasons, such as incorrect DNS configuration or the domain not being properly defined. To resolve this issue:
 
-- **Modificar el archivo hosts:** 
+-   **Modify the hosts file:**
 
-  - Abre el archivo `hosts` en tu sistema. En Windows, se encuentra en `C:\Windows\System32\drivers\etc\hosts`. Asegúrate de abrirlo con privilegios de administrador.
+    -   Open the `hosts` file on your system. On Windows, it is located at `C:\Windows\System32\drivers\etc\hosts`. Make sure to open it with administrative privileges.
 
-  - Agrega una línea con la dirección IP correspondiente y el dominio que estás utilizando. Por ejemplo:
+    -   Add a line with the corresponding IP address and the domain you are using. For example:
 
-    ```
-    192.168.1.1   yourDomain.com
-    ```
+        ```
+        192.168.1.1   yourDomain.com
+        ```
 
-  - Guarda los cambios y reinicia tu navegador.
+    -   Save the changes and restart your browser.
 
-### 2. Failed to open stream: Permission denied SOLUCTION
+### 2. Failed to open stream: Permission denied SOLUTION
 
-Este error está relacionado con los permisos de acceso a los archivos y carpetas de tu aplicación Laravel. Laravel almacena logs, caché y otros archivos temporales en la carpeta `storage`, y es crucial que los usuarios de IIS tengan los permisos adecuados para acceder a estos archivos. 
+This error is related to access permissions for the files and folders of your Laravel application. Laravel stores logs, cache, and other temporary files in the `storage` folder, and it is crucial that the IIS users have the appropriate permissions to access these files.
 
-- **Entendiendo los permisos:**
+-   **Understanding permissions:**
 
-  - Cuando IIS maneja las solicitudes, opera bajo un usuario específico (como `IIS_IUSRS` en Windows), que necesita tener acceso a las carpetas donde Laravel almacena datos. 
+    -   When IIS handles requests, it operates under a specific user (such as `IIS_IUSRS` on Windows), which needs to have access to the folders where Laravel stores data.
 
-  - Debes asegurarte de que la carpeta `storage` y sus subcarpetas tengan permisos adecuados. Se recomienda otorgar al menos permisos de lectura y escritura al usuario de IIS.
-  
-- **Configuración de permisos:**
+    -   You must ensure that the `storage` folder and its subfolders have adequate permissions. It is recommended to grant at least read and write permissions to the IIS user.
 
-  - Haz clic derecho en la carpeta `storage`, selecciona "Propiedades", y luego ve a la pestaña "Seguridad".
+-   **Setting permissions:**
 
-  - Asegúrate de que el grupo `IIS_IUSRS` tenga los permisos de lectura y escritura habilitados.
+    -   Right-click on the `storage` folder, select "Properties," and then go to the "Security" tab.
 
-- **Importancia de los permisos:**
+    -   Ensure that the `IIS_IUSRS` group has read and write permissions enabled.
 
-  - Si los permisos no están configurados correctamente, Laravel no podrá crear logs o almacenar caché, lo que puede llevar a errores en la ejecución de tu aplicación.
+-   **Importance of permissions:**
 
-![Aplicativo Búsqueda Correcta](./public/assets/imgs/SolutionErr.png "Aplicativo Búsqueda Correcta.")
+    -   If the permissions are not configured correctly, Laravel will not be able to create logs or store cache, which may lead to errors in your application execution.
 
-### 3. Failed to connect to yourDomain port xxx after 21021 ms SOLUCTION
+![Correct Search Application](./public/assets/imgs/SolutionErr.png "Correct Search Application.")
 
-Este error indica que tu servidor no pudo establecer una conexión con el dominio especificado. Puede ser causado por problemas de red o configuraciones de seguridad.
+### 3. Failed to connect to yourDomain port xxx after 21021 ms SOLUTION
 
-- **Revisar permisos de salida:** 
+This error indicates that your server could not establish a connection with the specified domain. It may be caused by network issues or security configurations.
 
-  - Asegúrate de que tu servidor tenga permisos para realizar peticiones salientes a Internet. Esto puede incluir configuraciones en el firewall o en el software de seguridad que esté ejecutándose en el servidor.
+-   **Check outbound permissions:**
 
-- **Configuraciones en el NAS:** 
+    -   Ensure that your server has permission to make outgoing requests to the internet. This may include configurations in the firewall or security software running on the server.
 
-  - Verifica que el NAS esté configurado para aceptar solicitudes desde diferentes ubicaciones geográficas. Si tu servidor se encuentra en un país diferente (por ejemplo, si tu NAS solo permite conexiones desde Colombia), necesitarás ajustar las configuraciones de seguridad para permitir las solicitudes desde tu servidor.
+-   **Configurations on the NAS:**
 
-Siguiendo estos, pasos posiblemente podrás solucionar los problemas más comunes que pueden surgir al configurar tu aplicación Laravel en un entorno IIS.
+    -   Verify that the NAS is configured to accept requests from different geographic locations. If your server is located in a different country (for example, if your NAS only allows connections from Colombia), you will need to adjust the security settings to permit requests from your server.
+
+By following these steps, you may be able to resolve the most common issues that can arise when configuring your Laravel application in an IIS environment.
 
 ## Swagger
 
-Swagger es una herramienta poderosa que permite documentar y probar APIs de manera interactiva. Con Swagger, puedes realizar diferentes pruebas de acuerdo con los endpoints que se han definido en tu aplicación Laravel. Para acceder a la documentación de Swagger, una vez que hayas publicado tu proyecto en IIS, o si estás ejecutando el servidor localmente con `php artisan serve`, simplemente debes navegar a la siguiente URL: `/api/documentation`
+Swagger is a powerful tool that allows you to document and test APIs interactively. With Swagger, you can perform various tests according to the endpoints defined in your Laravel application. To access the Swagger documentation, once you have published your project on IIS, or if you are running the server locally with `php artisan serve`, simply navigate to the following URL: `/api/documentation`.
 
-Desde esta interfaz, podrás explorar todos los endpoints disponibles, realizar pruebas enviando solicitudes y visualizar las respuestas en tiempo real. Además, si deseas agregar más endpoints o modificar la documentación existente, puedes hacerlo fácilmente a través de la configuración de Swagger en tu proyecto.
+From this interface, you will be able to explore all available endpoints, conduct tests by sending requests, and view the responses in real-time. Additionally, if you wish to add more endpoints or modify the existing documentation, you can easily do so through the Swagger configuration in your project.
 
-## Conclusiones
+## Conclusions
 
-El objetivo de este repositorio es ofrecer asistencia a aquellos que enfrentan problemas con las configuraciones diarias en Laravel e IIS. Aunque no se abarcan todos los errores posibles, se han incluido los que personalmente me han presentado mayores dificultades al buscar soluciones que aplicaran a mi proyecto. 
+The aim of this repository is to assist those facing issues with daily configurations in Laravel and IIS. While not all possible errors are covered, those that have personally presented the greatest challenges when searching for applicable solutions for my project have been included.
 
-Agradezco cualquier ayuda o comentario que se pueda proporcionar para mejorar este recurso y facilitar la configuración y uso de Laravel en entornos IIS.
-
+I appreciate any help or feedback that can be provided to improve this resource and facilitate the configuration and use of Laravel in IIS environments.

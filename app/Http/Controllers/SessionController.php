@@ -17,11 +17,11 @@ class SessionController extends Controller
     /**
      * Obtain a Sid token
      * @OA\Post (
-     *     path="/api/v1/dnda/session/login",
+     *     path="/api/v1/session/login",
      *     tags={"Session"},
      *     description="
      *  Example request:
-     *      POST api/v1/dnda/session/login?username={value}&password={value}
+     *      POST api/v1/session/login?username={value}&password={value}
      *               
      *  Example of a successful response:
      *      {Sid}

@@ -7,7 +7,7 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\SessionController;
 
 // Agrupar las rutas bajo el prefijo api/v1/dnda
-Route::prefix('v1/dnda')->group(function () {
+Route::prefix('v1')->group(function () {
     
     // Rutas GET
     Route::get('/files/download', [FileController::class, 'download']);

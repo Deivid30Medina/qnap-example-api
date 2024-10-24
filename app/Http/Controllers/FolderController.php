@@ -18,11 +18,11 @@ class FolderController extends Controller
     /**
      * Validate if a folder exists in a specific location
      * @OA\Get (
-     *     path="/api/v1/dnda/folder/exists",
+     *     path="/api/v1/folder/exists",
      *     tags={"Folder"},
      *     description="
      *  Example request:
-     *      POST api/v1/dnda/folder/exists?sid={value}&folderPath={value}&folderName={value}
+     *      POST api/v1/folder/exists?sid={value}&folderPath={value}&folderName={value}
      *               
      *  Example of a successful response:
      *      True - If the folder already exists in the location
@@ -95,11 +95,11 @@ class FolderController extends Controller
     /**
      * Create a folder in a specified location
      * @OA\Post (
-     *     path="/api/v1/dnda/folder/create",
+     *     path="/api/v1/folder/create",
      *     tags={"Folder"},
      *     description="
      *  Example request:
-     *      POST api/v1/dnda/folder/create?sid={value}&folderPath={value}&folderName={value}
+     *      POST api/v1/folder/create?sid={value}&folderPath={value}&folderName={value}
      *               
      *  Example of a successful response:
      *      {

@@ -16,12 +16,12 @@ class FileController extends Controller
 
     /**
      * @OA\Post (
-     *     path="/api/v1/dnda/files/upload",
+     *     path="/api/v1/files/upload",
      *     tags={"File"},
      *     summary="Upload a file to QNAP",
      *     description="
      *  Example request:
-     *      POST api/v1/dnda/files/upload?sid={value}&folderPath={value}
+     *      POST api/v1/files/upload?sid={value}&folderPath={value}
      *          
      *      form-data
      *          KEY: file
@@ -110,11 +110,11 @@ class FileController extends Controller
     /**
      * Download a file from the specified folder
      * @OA\Get (
-     *     path="/api/v1/dnda/files/download",
+     *     path="/api/v1/files/download",
      *     tags={"File"},
      *     description="
      *  Example request:
-     *      POST api/v1/dnda/files/download?sid={value}&folderPath={value}&fileName={value}
+     *      POST api/v1/files/download?sid={value}&folderPath={value}&fileName={value}
      *               
      *  Example of a successful response:
      *      File downloaded
