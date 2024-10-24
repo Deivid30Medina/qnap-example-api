@@ -10,36 +10,36 @@ The purpose of this documentation is to help users understand and manage their N
 
 Additionally, Swagger has been implemented in the application, allowing users to explore and visualize the API configuration directly in the respective code. This offers an interactive way to understand the available routes and methods, making it easier for those who wish to dive deeper into the API's setup.
 
-## Tabla de Contenidos
+## Table of Contents
 
 1. [Description](#description)
-2. [Requisitos previos](#prerequisites)
-3. [Creación del Proyecto Laravel](#creating-the-laravel-project)
-4. [Uso de Git](#using-git)
-5. [Configuración del Entorno](#environment-setup)
-    - [Instalación de Dependencias](#1-installing-dependencies)
-    - [Configuración archivo .ini](#2-configuring-the-ini-file)
-    - [Creación del Archivo .env](#3-creating-the-env-file)
-    - [Generación de APP_KEY](#4-generating-app_key)
-6. [Configuración de IIS](#iis-configuration)
-    - [Configuración de web.config](#what-is-webconfig)
-    - [Creación de un Pool de Aplicaciones](#what-is-an-application-pool-in-iis)
-    - [Creación de un Nuevo Sitio Web](#configuring-the-new-website)
-7. [Configuración del Document Default](#configuring-the-default-document)
+2. [Prerequisites](#prerequisites)
+3. [Creating the Laravel Project](#creating-the-laravel-project)
+4. [Using Git](#using-git)
+5. [Environment Setup](#environment-setup)
+    - [Installing Dependencies](#1-installing-dependencies)
+    - [Configuring the .ini File](#2-configuring-the-ini-file)
+    - [Creating the .env File](#3-creating-the-env-file)
+    - [Generating APP_KEY](#4-generating-app_key)
+6. [IIS Configuration](#iis-configuration)
+    - [Configuring web.config](#what-is-webconfig)
+    - [Creating an Application Pool](#what-is-an-application-pool-in-iis)
+    - [Creating a New Website](#configuring-the-new-website)
+7. [Configuring the Default Document](#configuring-the-default-document)
 8. [Handler Mapping](#handler-mapping-configuration)
-9. [Configuración de Hosts y Dominio](#hosts-and-domain-configuration)
-10. [Acceso a la aplicación](#accessing-the-application)
-11. [Resolución de Problemas](#troubleshooting)
+9. [Hosts and Domain Configuration](#hosts-and-domain-configuration)
+10. [Accessing the Application](#accessing-the-application)
+11. [Troubleshooting](#troubleshooting)
     - [DNS_PROBE_FINISHED_NXDOMAIN](#1-dns_probe_finished_nxdomain)
     - [Failed to open stream: Permission denied](#2-storageframeworkviews2a6b197af13a60869ebf5cbe9f5f7eafphp-failed-to-open-stream-permission-denied)
     - [Curl error. Failed to connect yourDomain](#3-curl-error-failed-to-connect-yourdomain-port-xxx-after-21021-ms-couldnt-connect-to-server)
-12. [Solucion de problemas](#troubleshooting-solutions)
+12. [Troubleshooting Solutions](#troubleshooting-solutions)
     - [DNS_PROBE_FINISHED_NXDOMAIN SOLUTION](#1-dns_probe_finished_nxdomain-solution)
-    -   [Failed to open stream: Permission denied SOLUTION](#2-failed-to-open-stream-permission-denied-solution)
-    -   [Failed to connect to yourDomain port xxx after 21021 ms SOLUTION](#3-failed-to-connect-to-yourdomain-port-xxx-after-21021-ms-solution)
-
+    - [Failed to open stream: Permission denied SOLUTION](#2-failed-to-open-stream-permission-denied-solution)
+    - [Failed to connect to yourDomain port xxx after 21021 ms SOLUTION](#3-failed-to-connect-to-yourdomain-port-xxx-after-21021-ms-solution)
 13. [Swagger](#swagger)
-14. [Conclusiones](#conclusions)
+14. [Conclusions](#conclusions)
+
 
 ### Prerequisites
 
