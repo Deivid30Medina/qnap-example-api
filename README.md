@@ -1,4 +1,4 @@
-# CONFIGURACIÓN QNAP IIS
+# CONFIGURATION QNAP IIS
 
 ## Description
 
